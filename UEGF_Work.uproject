@@ -7,6 +7,19 @@
 		{
 			"Name": "UEGF_Work",
 			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		},
+		{
+			"Name": "UEGF_Log",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "UEGF_Config",
+			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
 	],

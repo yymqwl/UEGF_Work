@@ -10,6 +10,10 @@ public class UEGF_WorkTarget : TargetRules
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V4;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("UEGF_Work");
+		
+		ExtraModuleNames.AddRange(new string[]
+		{
+			"UEGF_Work",
+		});
 	}
 }
