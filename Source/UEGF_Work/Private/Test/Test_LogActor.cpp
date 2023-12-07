@@ -31,15 +31,16 @@ void ATest_LogActor::BeginPlay()
 	
 	//FString PathToConfigFile;
 	Config2->SaveConfig();
+	
 	/*
 	int x;
 	GConfig->GetInt(TEXT("HttpSetting"),TEXT("MaxParallel"),x,HttpSetting);
 	*/
-	//auto  UEGF = FModuleManager::LoadModuleChecked<FUEGF>(FName(TEXT("UEGF")));
+	//auto  GF = FModuleManager::LoadModuleChecked<FGF>(FName(TEXT("GF")));
 	
-	//UEGF_LOG_TRACK();
-	//UE_LOG(Log_UEGF,Log,TEXT("ATest_LogActor:%d"),111);
-	//UEGF_LOG(TEXT("ATest_LogActor:%d"),111);
+	//GF_LOG_TRACK();
+	//UE_LOG(Log_GF,Log,TEXT("ATest_LogActor:%d"),111);
+	//GF_LOG(TEXT("ATest_LogActor:%d"),111);
 }
 
 // Called every frame

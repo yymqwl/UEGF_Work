@@ -17,7 +17,7 @@ class ULog : public UInterface
  * 
  */
 
-class UEGF_LOG_API ILog
+class GF_LOG_API ILog
 {
 	GENERATED_BODY()
 public:

@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class UEGF_Config : ModuleRules
+public class GF_Config : ModuleRules
 {
-	public UEGF_Config(ReadOnlyTargetRules Target) : base(Target)
+	public GF_Config(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
         PrivateDependencyModuleNames.AddRange(new string[] {

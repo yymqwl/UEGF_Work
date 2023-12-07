@@ -15,12 +15,12 @@ public class UEGF_Work : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
-			"UEGF_Log",
-			"UEGF_Config"
+			//"GF_Log",
+			//"GF_Config"
 		});
 		PrivateIncludePaths.AddRange(new string[]
 		{
-			"UEGF_Log/Private"
+			//"UEGF_Log/Private"
 		});
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

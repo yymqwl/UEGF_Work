@@ -11,14 +11,14 @@ void ULogSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	
 	//GConfig->GetInt()
-	//UEGF_LOG(TEXT("ULogSubsystem Initialize"));
+	//GF_LOG(TEXT("ULogSubsystem Initialize"));
 }
 
 
 
 void ULogSubsystem::Deinitialize()
 {
-	//UEGF_LOG(TEXT("ULogSubsystem Deinitialize"));
+	//GF_LOG(TEXT("ULogSubsystem Deinitialize"));
 }
 
 

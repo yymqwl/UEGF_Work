@@ -1,26 +1,26 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Log_Actor.generated.h"
+#include "MyActor3.generated.h"
 
 UCLASS()
-class UEGF_LOG_API ALog_Actor : public AActor
+class AMyActor3 : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
-	ALog_Actor();
+	AMyActor3();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void Log(FString str);
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 };

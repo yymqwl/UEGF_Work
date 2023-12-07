@@ -18,7 +18,7 @@ ALog_Actor::ALog_Actor()
 void ALog_Actor::BeginPlay()
 {
 	Super::BeginPlay();
-	//UEGF_LOG(TEXT("%d"),Config->MaxParallel);
+	//GF_LOG(TEXT("%d"),Config->MaxParallel);
 	//Log("xxxx%d",Config->MaxParallel);
 }
 void ALog_Actor::Log(FString str)
@@ -26,15 +26,15 @@ void ALog_Actor::Log(FString str)
 	auto logsubsys =GetGameInstance()->GetSubsystem<ULogSubsystem>();
 	if (logsubsys)
 	{
-		UE_LOG(Log_UEGF,Log,TEXT("%s"),*str);
+		UE_LOG(Log_GF,Log,TEXT("%s"),*str);
 	}
 	//GetGameInstance()
-	//UE_LOG(Log_UEGF,Log)
+	//UE_LOG(Log_GF,Log)
 	//UE::Logging::Private::BasicLog()
-	//UE_LOG(Log_UEGF,Log);
+	//UE_LOG(Log_GF,Log);
 	//GEngine->AddOnScreenDebugMessage()
 	//GEngine->AddOnScreenDebugMessage()
-	//UEGF_LOG_TRACK();
+	//GF_LOG_TRACK();
 }
 
 

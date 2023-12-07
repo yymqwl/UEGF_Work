@@ -10,7 +10,7 @@
  * 
  */
 UCLASS(Config=HttpSetting,Defaultconfig)
-class UEGF_WORK_API  UHttpSetting  : public UObject
+class   UHttpSetting  : public UObject
 {
 	GENERATED_BODY()
 public:

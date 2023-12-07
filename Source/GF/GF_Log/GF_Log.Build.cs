@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class UEGF_Log : ModuleRules
+public class GF_Log : ModuleRules
 {
-	public UEGF_Log(ReadOnlyTargetRules Target) : base(Target)
+	public GF_Log(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	

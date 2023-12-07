@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Modules/ModuleManager.h"
 
-class UEGF_LOG_API FUEGF_LogModule : public IModuleInterface
+class GF_LOG_API FGF_LogModule : public FDefaultGameModuleImpl
 {
 public:
 

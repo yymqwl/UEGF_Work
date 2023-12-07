@@ -12,7 +12,7 @@ public class UEGF_WorkEditorTarget : TargetRules
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
 		ExtraModuleNames.AddRange(new string[]
 		{
-			"UEGF_Work",
+			"UEGF_Work"
 		});
 	}
 }

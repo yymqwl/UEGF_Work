@@ -4,11 +4,10 @@
 
 
 #include "CoreMinimal.h"
-#include "Modules/ModuleInterface.h"
 
 
 
-class UEGF_CONFIG_API FUEGF_Config : public IModuleInterface
+class GF_CONFIG_API FGF_Config : public FDefaultGameModuleImpl
 {
 public:	
 	virtual void StartupModule() override;

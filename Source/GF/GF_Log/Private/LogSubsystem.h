@@ -12,7 +12,7 @@
  日志系统
  */
 UCLASS(Blueprintable)
-class UEGF_LOG_API ULogSubsystem : public UGameInstanceSubsystem
+class GF_LOG_API ULogSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 public:
@@ -23,6 +23,6 @@ public:
 	virtual void Deinitialize()override;
 protected:
 	/*
-	UPROPERTY(config = UEGF,EditAnywhere)
+	UPROPERTY(config = GF,EditAnywhere)
 	int   x;*/
 };
