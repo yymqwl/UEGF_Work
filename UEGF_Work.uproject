@@ -18,6 +18,11 @@
 			"LoadingPhase": "Default"
 		},
 		{
+			"Name": "GF_Core",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
 			"Name": "GF_Config",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",

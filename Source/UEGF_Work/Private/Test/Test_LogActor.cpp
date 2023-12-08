@@ -3,7 +3,6 @@
 
 #include "Test_LogActor.h"
 
-#include "HttpSetting.h"
 //#include "Log/Log.h"
 
 // Sets default values
@@ -21,22 +20,7 @@ void ATest_LogActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
-	const UHttpSetting* Config = GetDefault<UHttpSetting>();
-	//UE_LOG(LogTemp,Log,TEXT("%s"),*Config->GetCategoryName().GetPlainNameString());
-	UE_LOG(LogTemp,Log,TEXT("%d"),Config->MaxParallel);
 
-	auto Config2 = GetMutableDefault<UHttpSetting>();
-	Config2->MaxParallel = 10;
-	
-	//FString PathToConfigFile;
-	Config2->SaveConfig();
-	
-	/*
-	int x;
-	GConfig->GetInt(TEXT("HttpSetting"),TEXT("MaxParallel"),x,HttpSetting);
-	*/
-	//auto  GF = FModuleManager::LoadModuleChecked<FGF>(FName(TEXT("GF")));
 	
 	//GF_LOG_TRACK();
 	//UE_LOG(Log_GF,Log,TEXT("ATest_LogActor:%d"),111);

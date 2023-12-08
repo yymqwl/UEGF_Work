@@ -3,17 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
 #include "GFSetting.generated.h"
 
 /**
  * 
  */
-UCLASS(Config=GFSetting,Defaultconfig)
-class UGFSetting : public UObject
+UCLASS(Config=GFSetting,Defaultconfig)//Defaultconfig
+class GF_CORE_API UGFSetting : public UObject
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(config)
+	/*UPROPERTY(config)
 	FString Name;
+	UPROPERTY(Config)
+	ELog_Type Log_Type;*/
 };

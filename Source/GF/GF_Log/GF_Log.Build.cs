@@ -12,7 +12,15 @@ public class GF_Log : ModuleRules
 			"Core",
 			"CoreUObject",
 			"Engine", 
-			"InputCore"
+			"InputCore",
+			"GF_Config",
+			"GF_Core"
+		});
+		
+		PrivateIncludePaths.AddRange(new string[]
+		{
+			"GF/GF_Core/Public",
+			"GF/GF_Config/Private"
 		});
 	}
 }

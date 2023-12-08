@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ALog.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "LogSubsystem.generated.h"
 
@@ -12,7 +13,7 @@
  日志系统
  */
 UCLASS(Blueprintable)
-class GF_LOG_API ULogSubsystem : public UGameInstanceSubsystem
+class GF_LOG_API ULogSubsystem : public UGameInstanceSubsystem,public ILog
 {
 	GENERATED_BODY()
 public:
@@ -21,8 +22,15 @@ public:
 
 	/** Implement this for deinitialization of instances of the system */
 	virtual void Deinitialize()override;
-protected:
+
 	/*
-	UPROPERTY(config = GF,EditAnywhere)
-	int   x;*/
+	virtual  void Verbose(...);
+	virtual void Log(...);
+	virtual void Warning(...);
+	virtual void Error(...);
+	virtual void Fatal(...);*/
+	virtual void Log(...) ;
+	//virtual void Log(ELogVerbosity::Type type,...);
+protected:
+	//TMap<ELog_Type,UALog> LogMap;
 };

@@ -4,6 +4,7 @@
 #include "Log_Actor.h"
 
 #include "ALog.h"
+#include "GFCoreGlobals.h"
 #include "LogSubsystem.h"
 
 
@@ -26,7 +27,8 @@ void ALog_Actor::Log(FString str)
 	auto logsubsys =GetGameInstance()->GetSubsystem<ULogSubsystem>();
 	if (logsubsys)
 	{
-		UE_LOG(Log_GF,Log,TEXT("%s"),*str);
+		GF_Log.SetVerbosity(ELogVerbosity::Error);
+		//UE_LOG(Log_GF,Log,TEXT("%s"),*str);
 	}
 	//GetGameInstance()
 	//UE_LOG(Log_GF,Log)

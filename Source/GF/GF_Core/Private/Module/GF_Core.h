@@ -7,7 +7,7 @@
 
 
 
-class GF_CONFIG_API FGF_Config : public FDefaultGameModuleImpl
+class GF_CORE_API FGF_Core : public FDefaultGameModuleImpl
 {
 public:	
 	virtual void StartupModule() override;

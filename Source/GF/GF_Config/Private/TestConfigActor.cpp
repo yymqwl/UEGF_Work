@@ -3,8 +3,6 @@
 
 #include "TestConfigActor.h"
 
-#include "GFSetting.h"
-
 // Sets default values
 ATestConfigActor::ATestConfigActor()
 {
@@ -17,13 +15,7 @@ ATestConfigActor::ATestConfigActor()
 void ATestConfigActor::BeginPlay()
 {
 	Super::BeginPlay();
-	const UGFSetting* Config = GetDefault<UGFSetting>();
-	UE_LOG(LogTemp,Log,TEXT("%s"),*Config->Name);
 
-	auto config = GetMutableDefault<UGFSetting>();
-	config->Name  = TEXT("xxx");
-	config->SaveConfig();
-	//GConfig->LoadGlobalIniFile()
 }
 
 // Called every frame
