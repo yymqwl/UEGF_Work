@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "MyActor3.generated.h"
+#include "TestSociActor.generated.h"
 
 UCLASS()
-class AMyActor3 : public AActor
+class ATestSociActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMyActor3();
+	ATestSociActor();
 
 protected:
 	// Called when the game starts or when spawned

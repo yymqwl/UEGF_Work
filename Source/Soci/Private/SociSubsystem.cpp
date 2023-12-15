@@ -1,0 +1,101 @@
+﻿// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "SociSubsystem.h"
+
+#include "ASQLSubsystem.h"
+#include "SociLog.h"
+#include "SociSetting.h"
+
+
+void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+	//auto sociSetting =GetDefault<USociSetting>();
+	
+	//SOCI_LOG(TEXT("sociSetting:%d"),this->SociDefinitions.Num());
+
+	ClearArray();
+
+	///
+	TArray<UClass*> SubsystemClasses;
+	GetDerivedClasses(UASQLSubsystem::StaticClass(), SubsystemClasses, true);
+	for (UClass* SubsystemClass : SubsystemClasses)
+	{
+		
+		SOCI_LOG(TEXT("%s"),SubsystemClass->GetClass())
+		if (SubsystemClass->HasAnyClassFlags(CLASS_Abstract))
+		{
+			continue;
+		}
+		/*auto p_sqlsubsys = NewObject<UASQLSubsystem>(this,SubsystemClass);
+
+		auto sqltype = p_sqlsubsys->Get_SQLType();
+		if (SQLSubsystem_Map.Contains(sqltype))
+		{
+			SOCI_ERROR(TEXT("SQLSubsystem_Map Has Same Type %s"),sqltype);
+		}*/
+		
+		auto p_sqlsubsys = SubsystemClass->GetDefaultObject<UASQLSubsystem>();
+		check(p_sqlsubsys);
+		auto sqltype = p_sqlsubsys->Get_SQLType();
+		
+		if ( SQLSubsystemClass_Map.Contains(sqltype))
+		{
+			SOCI_ERROR(TEXT("SQLSubsystem_Map Has Same Type %s"),sqltype);
+			continue;
+		}
+		SQLSubsystemClass_Map.Add(sqltype,SubsystemClass);
+	}
+
+	//设置
+	
+	for (const FSociDefinition& socidef : this->SociDefinitions)
+	{
+		if (!SQLSubsystemClass_Map.Contains(socidef.SQLType))
+		{
+			SOCI_LOG(TEXT("Null Adaptater:%s"),socidef.SQLType)
+			continue;
+		}
+		auto sqlclass =SQLSubsystemClass_Map[socidef.SQLType];
+		
+		auto sql_subsys= NewObject<UASQLSubsystem>(this,sqlclass);//存储泄漏问题
+		sql_subsys->Initialize(&socidef);
+		if (SQLSubsystem_Map.Contains(socidef.DefName))
+		{
+			SOCI_ERROR(TEXT("SQLSubsystem_Map Same Name %s"),socidef.DefName);
+			continue;
+		}
+		SQLSubsystem_Map.Add(socidef.DefName,sql_subsys);
+	}
+
+	/*SOCI_LOG(TEXT("所有创建的类:%d"),SQLSubsystem_Map.Num())
+	
+	for (const FSociDefinition& socidef : sociSetting->SociDefinitions)
+	{
+		
+		NewObject<>()
+	}*/
+	
+	/*
+	foreach(auto element in sociSetting->SociDefinitions)
+	{
+		
+	}*/
+	//this->GetGameInstance()->GetSubsystem<>()
+	
+}
+
+void USociSubsystem::ClearArray()
+{
+	SQLSubsystemClass_Map.Empty();//清空所有
+	SQLSubsystem_Map.Empty();
+}
+
+void USociSubsystem::Deinitialize()
+{
+	for (TTuple<FName, TObjectPtr<UASQLSubsystem>>&  sqlsubsys : SQLSubsystem_Map)
+	{
+		sqlsubsys.Value->Deinitialize();
+	}
+	ClearArray();
+}

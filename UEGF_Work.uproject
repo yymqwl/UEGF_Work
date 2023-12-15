@@ -18,6 +18,14 @@
 			"LoadingPhase": "Default"
 		},
 		{
+			"Name": "Soci",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		},
+		{
 			"Name": "GF_Core",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"

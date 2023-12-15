@@ -10,13 +10,13 @@ void ULogSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
-	
+
 	/*auto LogSetting = GetDefault<UGF_LogSetting>();
 	check(LogSetting);
-	*/
+	
 	GF_LOG(TEXT("闪退:1"));
 	UE_LOG(GF_Log,Warning,TEXT("闪退:2"));
-	
+	*/
 	
 	//GF_LOG(TEXT("闪退:1"));
 	/*if (LogSetting == nullptr)
