@@ -15,16 +15,21 @@ public:
 	// Sets default values for this actor's properties
 	ATestAsyncActor();
 
-	
+	/*
 	UFUNCTION()
 	void OnKeyPressed(FKey Key);
+	*/
+
+	UFUNCTION(BlueprintCallable)
+	void Test1();
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	
 	//virtual void NotifyActorOnClicked(FKey ButtonPressed) override;
-	virtual void DestroyPlayerInputComponent();
+	//virtual void DestroyPlayerInputComponent();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

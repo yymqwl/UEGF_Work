@@ -29,9 +29,12 @@ UE_LOG(GF_Log,Fatal,Format,##__VA_ARGS__)
 ///////////////////////////////
 
 
-
-
-
+//直接输入当前线程号
+/*#define GF_LOG_CURRENTTHREAD uint32 CurrentThreadId = FPlatformTLS::GetCurrentThreadId();\
+FString CurrentThreadName = FThreadManager::Get().GetThreadName(CurrentThreadId);\
+GF_LOG(TEXT("%s[%d] 使用线程"), *CurrentThreadName, CurrentThreadId);
+*/
+extern GF_CORE_API void Log_CurrentThread(const FString& str);
 
 
 

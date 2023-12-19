@@ -2,6 +2,8 @@
 
 #include "GFCoreGlobals.h"
 
+#include "HAL/ThreadManager.h"
+
 //定义日志方法
 DEFINE_LOG_CATEGORY(GF_Log);
 
@@ -20,6 +22,12 @@ DEFINE_LOG_CATEGORY(GF_Log);
 
 
 
+void Log_CurrentThread(const FString&  str)
+{
+	uint32 CurrentThreadId = FPlatformTLS::GetCurrentThreadId();\
+	FString CurrentThreadName = FThreadManager::Get().GetThreadName(CurrentThreadId);\
+	GF_LOG(TEXT("线程:%s[%d] 输出:%s"), *CurrentThreadName, CurrentThreadId,*str);
+}
 
 
 

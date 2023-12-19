@@ -14,6 +14,7 @@ void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	
 	//SOCI_LOG(TEXT("sociSetting:%d"),this->SociDefinitions.Num());
 
+	//GetGameInstance()->GetTimerManager().SetTimer()
 	ClearArray();
 
 	///
@@ -22,7 +23,7 @@ void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	for (UClass* SubsystemClass : SubsystemClasses)
 	{
 		
-		SOCI_LOG(TEXT("%s"),SubsystemClass->GetClass())
+		SOCI_LOG(TEXT("Soci Add Classes:%s"),*SubsystemClass->GetName())
 		if (SubsystemClass->HasAnyClassFlags(CLASS_Abstract))
 		{
 			continue;
@@ -60,6 +61,7 @@ void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		
 		auto sql_subsys= NewObject<UASQLSubsystem>(this,sqlclass);//存储泄漏问题
 		sql_subsys->Initialize(&socidef);
+		
 		if (SQLSubsystem_Map.Contains(socidef.DefName))
 		{
 			SOCI_ERROR(TEXT("SQLSubsystem_Map Same Name %s"),socidef.DefName);
@@ -82,6 +84,7 @@ void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		
 	}*/
 	//this->GetGameInstance()->GetSubsystem<>()
+
 	
 }
 
@@ -93,9 +96,16 @@ void USociSubsystem::ClearArray()
 
 void USociSubsystem::Deinitialize()
 {
+
+	SOCI_LOG(TEXT("USociSubsystem Deinitialize"));
 	for (TTuple<FName, TObjectPtr<UASQLSubsystem>>&  sqlsubsys : SQLSubsystem_Map)
 	{
 		sqlsubsys.Value->Deinitialize();
 	}
+	/*
+	for (TTuple<ESocil_SQLType, UClass* >&  socil_sqltype : SQLSubsystemClass_Map)
+	{
+		SOCI_LOG(TEXT("析构:%s"),*socil_sqltype.Value->GetName())
+	}*/
 	ClearArray();
 }

@@ -15,6 +15,11 @@ UE_LOG(Soci_Log,Log,Format,##__VA_ARGS__)
 #define SOCI_ERROR(Format, ...) \
 UE_LOG(Soci_Log,Error,Format,##__VA_ARGS__)
 
+
+
+
+
+
 using namespace soci;
 using namespace std;
 
@@ -26,3 +31,4 @@ public:
 private:
 	virtual Ue_Soci_Log_Impl* do_clone() const override;
 };
+

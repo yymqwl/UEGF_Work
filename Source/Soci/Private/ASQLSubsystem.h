@@ -4,14 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "SociSetting.h"
+
 #include "ASQLSubsystem.generated.h"
 
-//class USociSubsystem;
+class USociSubsystem;
 /**
  * 依附于USociSubsystem系统之下
  *
- * 暂时考虑把SOCI放进一个新的线程,方便用户操作
- */
+*/
+
+
 UCLASS(Abstract)
 class SOCI_API UASQLSubsystem : public UObject
 {
@@ -25,18 +27,28 @@ public:
 	/** Implement this for deinitialization of instances of the system */
 	virtual void Deinitialize();
 
-	
+	UFUNCTION()
+	virtual void Open();
 	UFUNCTION()
 	virtual  bool IsConnected();
 
 	UFUNCTION()
-	virtual ESocil_SQLType Get_SQLType() ;
+	virtual ESocil_SQLType Get_SQLType();
 
+	//线程执行,主线程执行
+	virtual void SQL_Operate(TUniqueFunction<void()>&& thread_fun,TUniqueFunction<void()> game_fun);
 
-	TFuture<bool> GetTime();
 	
-	//USociSubsystem* GetSociSubsystem()const;
+	virtual void Tick();
+	//TFuture<bool> GetTime();
+	
+	USociSubsystem* GetSociSubsystem() const;
 protected:
 	//bool bConnected;//是否连接
+	//UPROPERTY()
 	const FSociDefinition* PSociDefinition;//定义名称
+	ESQLSubsys_State  SQLSubsys_State;//线程安全
+	FCriticalSection SQL_CS;//线程同步锁
+	FTimerHandle TH_Tick;
+	int8  IRetry;//重试次数
 };

@@ -50,22 +50,42 @@ void ATestAsyncActor::BeginPlay()
 }*/
 //check(InputComponent);
 //InputComponent->Bind(EKeys::A, , this, &ATestAsyncActor::OnKeyPressed);
-
+/*
 void ATestAsyncActor::OnKeyPressed(FKey Key)
 {
 	GF_LOG(TEXT("A Press"));
-}
+}*/
 
+void ATestAsyncActor::Test1()
+{
+	GF_LOG(TEXT("Test1 Call"));
+	
+	auto ger  = FFunctionGraphTask::CreateAndDispatchWhenReady([]()
+	{
+		Log_CurrentThread(TEXT("当前线程1"));
+		FPlatformProcess::Sleep(3.f);
+		Log_CurrentThread(TEXT("当前线程2"));
+	});
+	// 同时创建多个任务
+	FGraphEventArray Tasks;
+	Tasks.Add(ger);
+	FFunctionGraphTask::CreateAndDispatchWhenReady([]()
+	{
+		Log_CurrentThread(TEXT("任务完成"));
+	},TStatId{},&Tasks,ENamedThreads::GameThread);
+	Log_CurrentThread(TEXT("任务下派Test1"));
+}
+/*
 void ATestAsyncActor::DestroyPlayerInputComponent()
 {
-	/*
+	
 	if (InputComponent)
 	{
 		InputComponent->DestroyComponent();
 		InputComponent = nullptr;
-	}*/
+	}
 }
-
+*/
 
 
 void ATestAsyncActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -77,12 +97,6 @@ void ATestAsyncActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void ATestAsyncActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	
-	
-	if (GetInputAxisKeyValue(TEXT("W")))
-	{
-		GF_LOG(TEXT("Press"));
-	}
 }
 

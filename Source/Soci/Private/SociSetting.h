@@ -23,6 +23,18 @@ enum class ESocil_SQLType :uint8
 };
 ENUM_CLASS_FLAGS(ESocil_SQLType);
 
+//数据库连接状态
+UENUM()
+enum class ESQLSubsys_State
+{
+	ENone,//最开始状态
+	EConnecting,//连接中
+	EConnected,//连接上
+	EFail,//失败
+};
+ENUM_CLASS_FLAGS(ESQLSubsys_State);
+
+
 
 USTRUCT()
 struct FSociDefinition
@@ -38,6 +50,7 @@ struct FSociDefinition
 	ESocil_SQLType SQLType;
 
 	
+	
 	FSociDefinition():
 	DefName(NAME_None),
 	HasLog(false)
@@ -46,6 +59,10 @@ struct FSociDefinition
 	}
 };
 
+//tick刷新间隔
+#define SQLSubSys_Tick_Rate 5.f
+//重试次数
+#define SQLSubSys_Retry_Nub 5
 /*
 UCLASS(Config=Game,Defaultconfig)
 class SOCI_API USociSetting : public UObject
