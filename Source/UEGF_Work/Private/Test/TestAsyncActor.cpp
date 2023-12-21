@@ -4,8 +4,7 @@
 #include "Test/TestAsyncActor.h"
 
 #include "GFCoreGlobals.h"
-#include "Channels/MovieSceneChannelTraits.h"
-#include "Kismet/GameplayStatics.h"
+#include "Soci/Private/SQLSubsystem.h"
 
 // Sets default values
 ATestAsyncActor::ATestAsyncActor()
@@ -58,8 +57,18 @@ void ATestAsyncActor::OnKeyPressed(FKey Key)
 
 void ATestAsyncActor::Test1()
 {
-	GF_LOG(TEXT("Test1 Call"));
-	
+	GF_LOG(TEXT("Test1 Call:%f"),	FPlatformTime::Seconds());
+
+	//TestSociActor->PSQLSubsys->Ping_SQL();
+
+	TestSociActor->PSQLSubsys->Ping_SQL();
+	/*
+	TArray<int> ay ;
+	ay.Sort()
+	*/
+	//ay.Sort()
+	//TestSociActor->PSQLSubsys->Ping_SQL()
+	/*
 	auto ger  = FFunctionGraphTask::CreateAndDispatchWhenReady([]()
 	{
 		Log_CurrentThread(TEXT("当前线程1"));
@@ -72,8 +81,10 @@ void ATestAsyncActor::Test1()
 	FFunctionGraphTask::CreateAndDispatchWhenReady([]()
 	{
 		Log_CurrentThread(TEXT("任务完成"));
-	},TStatId{},&Tasks,ENamedThreads::GameThread);
+	},TStatId{},&Tasks,ENamedThreads::GameThread);*/
 	Log_CurrentThread(TEXT("任务下派Test1"));
+
+	//GetGameInstance()->GetSubsystem<>()
 }
 /*
 void ATestAsyncActor::DestroyPlayerInputComponent()

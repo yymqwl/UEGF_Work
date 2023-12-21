@@ -25,14 +25,20 @@ public:
 
 	/** Implement this for deinitialization of instances of the system */
 	virtual void Deinitialize()override;
+
+
+	TObjectPtr<UASQLSubsystem> Find_SQLSubsystem(FName name);
 private:
 	void ClearArray();
 
 protected:
 	UPROPERTY(Config,transient)
 	TArray<FSociDefinition> SociDefinitions;
+
+	/*
 	UPROPERTY()
 	TMap<ESocil_SQLType,UClass*> SQLSubsystemClass_Map;
+	*/
 	//TMap<ESocil_SQLType,UASQLSubsystem*> SQLSubsystem_Map;
 	UPROPERTY()
 	TMap<FName,TObjectPtr<UASQLSubsystem>> SQLSubsystem_Map;//可能会有多个连接

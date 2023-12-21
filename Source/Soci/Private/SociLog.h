@@ -20,11 +20,10 @@ UE_LOG(Soci_Log,Error,Format,##__VA_ARGS__)
 
 
 
-using namespace soci;
-using namespace std;
 
 
-class Ue_Soci_Log_Impl : public logger_impl
+
+class Ue_Soci_Log_Impl : public soci::logger_impl
 {
 public:
 	virtual void start_query(std::string const& query) override;

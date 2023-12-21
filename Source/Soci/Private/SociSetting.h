@@ -1,9 +1,7 @@
 ﻿
-
-
 #pragma once
-#include "CoreMinimal.h"
 
+#include "CoreMinimal.h"
 #include "SociSetting.generated.h"
 
 //https://soci.sourceforge.net/doc/release/4.0
@@ -53,7 +51,8 @@ struct FSociDefinition
 	
 	FSociDefinition():
 	DefName(NAME_None),
-	HasLog(false)
+	HasLog(false),
+	SQLType(ESocil_SQLType::ENone)
 	{
 		
 	}
@@ -63,6 +62,8 @@ struct FSociDefinition
 #define SQLSubSys_Tick_Rate 5.f
 //重试次数
 #define SQLSubSys_Retry_Nub 5
+//超时时间
+#define SQLSubSys_TimeOut 60.f
 /*
 UCLASS(Config=Game,Defaultconfig)
 class SOCI_API USociSetting : public UObject

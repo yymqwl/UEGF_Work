@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Soci/Private/TestSociActor.h"
 #include "TestAsyncActor.generated.h"
 
 UCLASS(Blueprintable)
@@ -34,4 +35,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<ATestSociActor>  TestSociActor;
 };

@@ -6,7 +6,7 @@
 #include "ASQLSubsystem.h"
 #include "SociLog.h"
 #include "SociSetting.h"
-
+#include "SQLSubsystem.h"
 
 void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -18,8 +18,9 @@ void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	ClearArray();
 
 	///
+	/*
 	TArray<UClass*> SubsystemClasses;
-	GetDerivedClasses(UASQLSubsystem::StaticClass(), SubsystemClasses, true);
+	GetDerivedClasses(USQLSubsystem::StaticClass(), SubsystemClasses, true);
 	for (UClass* SubsystemClass : SubsystemClasses)
 	{
 		
@@ -28,13 +29,13 @@ void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		{
 			continue;
 		}
-		/*auto p_sqlsubsys = NewObject<UASQLSubsystem>(this,SubsystemClass);
+		auto p_sqlsubsys = NewObject<UASQLSubsystem>(this,SubsystemClass);
 
 		auto sqltype = p_sqlsubsys->Get_SQLType();
 		if (SQLSubsystem_Map.Contains(sqltype))
 		{
 			SOCI_ERROR(TEXT("SQLSubsystem_Map Has Same Type %s"),sqltype);
-		}*/
+		}
 		
 		auto p_sqlsubsys = SubsystemClass->GetDefaultObject<UASQLSubsystem>();
 		check(p_sqlsubsys);
@@ -42,29 +43,31 @@ void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		
 		if ( SQLSubsystemClass_Map.Contains(sqltype))
 		{
-			SOCI_ERROR(TEXT("SQLSubsystem_Map Has Same Type %s"),sqltype);
+			SOCI_ERROR(TEXT("SQLSubsystem_Map Has Same Type %d"),sqltype);
 			continue;
 		}
 		SQLSubsystemClass_Map.Add(sqltype,SubsystemClass);
 	}
-
+	*/
 	//设置
 	
 	for (const FSociDefinition& socidef : this->SociDefinitions)
 	{
+		/*
 		if (!SQLSubsystemClass_Map.Contains(socidef.SQLType))
 		{
-			SOCI_LOG(TEXT("Null Adaptater:%s"),socidef.SQLType)
+			SOCI_LOG(TEXT("Null Adaptater:%d"),socidef.SQLType)
 			continue;
 		}
 		auto sqlclass =SQLSubsystemClass_Map[socidef.SQLType];
+		*/
 		
-		auto sql_subsys= NewObject<UASQLSubsystem>(this,sqlclass);//存储泄漏问题
+		auto sql_subsys= NewObject<USQLSubsystem>(this);//存储泄漏问题
 		sql_subsys->Initialize(&socidef);
 		
 		if (SQLSubsystem_Map.Contains(socidef.DefName))
 		{
-			SOCI_ERROR(TEXT("SQLSubsystem_Map Same Name %s"),socidef.DefName);
+			SOCI_ERROR(TEXT("SQLSubsystem_Map Same Name %s"),*socidef.DefName.ToString());
 			continue;
 		}
 		SQLSubsystem_Map.Add(socidef.DefName,sql_subsys);
@@ -88,9 +91,15 @@ void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	
 }
 
+
+TObjectPtr<UASQLSubsystem> USociSubsystem::Find_SQLSubsystem(FName name)
+{
+	return  SQLSubsystem_Map[name];
+}
+
 void USociSubsystem::ClearArray()
 {
-	SQLSubsystemClass_Map.Empty();//清空所有
+	//SQLSubsystemClass_Map.Empty();//清空所有
 	SQLSubsystem_Map.Empty();
 }
 

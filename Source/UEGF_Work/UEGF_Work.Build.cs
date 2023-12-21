@@ -12,16 +12,19 @@ public class UEGF_Work : ModuleRules
 		{
 			"Core", "CoreUObject", "Engine", "InputCore"//,"ApplicationCore"
 		});
-
+		bUseRTTI = true;
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
 			//"GF_Log",
 			//"GF_Config"
-			"GF_Core"
+			"GF_Core",
+			"Soci"
 		});
 		PrivateIncludePaths.AddRange(new string[]
 		{
-			"GF/GF_Core/Public"
+			"GF/GF_Core/Public",
+			"Soci/include"
+			//"Soci/include"
 		});
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

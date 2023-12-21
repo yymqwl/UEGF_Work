@@ -13,11 +13,18 @@ DEFINE_LOG_CATEGORY(GF_Log);
 
 
 
+/*
+https://unreal.gg-labs.com/wiki-archives/macros-and-data-types/enums-for-both-c++-and-bp
+ */
 
 
 
-
-
+template<typename TEnum>
+FString GetEnumValueAsString(const FString& Name, TEnum Value) {
+	const UEnum* enumPtr = FindObject<UEnum>(ANY_PACKAGE, *Name, true);
+	if (!enumPtr) return FString("Invalid");
+	return enumPtr->GetNameByValue((int64)Value).ToString();
+} 
 
 
 

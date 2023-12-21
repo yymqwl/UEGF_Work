@@ -1,5 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+using System;
 using System.IO;
 using UnrealBuildTool;
 
@@ -17,7 +18,7 @@ public class Soci : ModuleRules
 		}
 	}
 		
-		
+	
 		//= Path.Combine(ModuleDirectory,"/Soci","lib", "Win64", "Release");
 	public Soci(ReadOnlyTargetRules Target) : base(Target)
 	{
@@ -30,17 +31,21 @@ public class Soci : ModuleRules
 			"Engine", 
 		});
 		
-		/*
+		
 		PublicDefinitions.AddRange(new []
 		{
-			"SOCI_LOG =1 "
-		});*/
+            "_CRT_SECURE_NO_DEPRECATE"//去除警告
+			//"SOCI_LOG =1 "
+		});
 
 		bUseRTTI = true;//开启RTTI 使用dynamic_cast功能
 		
+		//Console.WriteLine("头文件路径:"+Path.Combine(ModuleDirectory,"include"));
+		
 		PrivateIncludePaths.AddRange(new string[]
 		{
-			"Soci/include",
+			"Soci/include"
+			//Path.Combine(ModuleDirectory,"include")
 			//"include/soci",
 		});
 		if (Target.Platform == UnrealTargetPlatform.Win64)

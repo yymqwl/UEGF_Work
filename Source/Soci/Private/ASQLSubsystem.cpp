@@ -3,9 +3,10 @@
 
 
 #include "ASQLSubsystem.h"
-
 #include "SociLog.h"
 #include "SociSubsystem.h"
+
+
 //#include "SociSubsystem.h"
 
 //它允许你将生成的文件(xxx.Generated.cpp)内联到模块CPP文件中，这样能减少需要解析的头文件数量，从而缩短编译时间。
@@ -29,7 +30,7 @@ bool UASQLSubsystem::IsConnected()
 
 ESocil_SQLType UASQLSubsystem::Get_SQLType()
 {
-	return ESocil_SQLType::ENone;
+	return PSociDefinition->SQLType;
 }
 
 void UASQLSubsystem::Initialize(const FSociDefinition* sociDefinition)
@@ -38,9 +39,10 @@ void UASQLSubsystem::Initialize(const FSociDefinition* sociDefinition)
 	PSociDefinition = sociDefinition;
 	SQLSubsys_State = ESQLSubsys_State::ENone;
 	IRetry = SQLSubSys_Retry_Nub;
-	
-	
+	SOCI_LOG(TEXT("Initialize:%d_%s"),PSociDefinition->SQLType,*PSociDefinition->DefName.ToString());
+
 	GetSociSubsystem()->GetGameInstance()->GetTimerManager().SetTimer(TH_Tick,this,&UASQLSubsystem::Tick,SQLSubSys_Tick_Rate,true,0);
+
 	
 	//FFunctionGraphTask::CreateAndDispatchWhenReady()
 	/*
@@ -53,64 +55,54 @@ void UASQLSubsystem::Initialize(const FSociDefinition* sociDefinition)
 
 void UASQLSubsystem::Deinitialize()
 {
+	SOCI_LOG(TEXT("Deinitialize:%d_%s"),PSociDefinition->SQLType, *PSociDefinition->DefName.ToString());
 	PSociDefinition = nullptr;
 	GetSociSubsystem()->GetGameInstance()->GetTimerManager().ClearTimer(TH_Tick);
 }
+void UASQLSubsystem::UpdateActiveTime()
+{
+	LastActiveTime = FPlatformTime::Seconds();
+}
+/*
+const soci::backend_factory& UASQLSubsystem::Get_backend_factory()
+{
+	return  soci::odbc;
+	//return backend_factory();
+}*/
+
+
+
 void UASQLSubsystem::Open()
 {
 	
 }
-
-void UASQLSubsystem::Tick()
+void UASQLSubsystem::Close()
 {
-	if (SQLSubsys_State == ESQLSubsys_State::EFail)//失败重试
-	{
-		if (IRetry>0 )
-		{
-			--IRetry;
-			SQLSubsys_State = ESQLSubsys_State::ENone;
-			SOCI_LOG(TEXT("Retry Nub: %d"),IRetry);
-		}
-		else
-		{
-			SOCI_LOG(TEXT("Retry Nub Not enough"));
-		}
-	}
-	else if (SQLSubsys_State == ESQLSubsys_State::ENone )
-	{
-		this->Open();
-	}
-	else if (SQLSubsys_State == ESQLSubsys_State::EConnecting )
-	{
-		
-	}
-	else if (SQLSubsys_State == ESQLSubsys_State::EConnected )//X s进行测检测
-	{
-		
-	}
 	
-	//SOCI_LOG(TEXT("Tick"));
 }
 
 
 
-void UASQLSubsystem::SQL_Operate(TUniqueFunction<void()>&& thread_fun,TUniqueFunction<void()> game_fun)
+void UASQLSubsystem::Tick()
+{
+	//SOCI_LOG(TEXT("Tick"));
+}
+
+void UASQLSubsystem::Ping_SQL()
+{
+	
+}
+
+
+FGraphEventRef UASQLSubsystem::Async_Operate(TUniqueFunction<void()>&& thread_fun,TUniqueFunction<void()>&& game_fun)
 {
 	//FFunctionGraphTask::CreateAndDispatchWhenReady()
-	FFunctionGraphTask::CreateAndDispatchWhenReady(MoveTemp(thread_fun));
+	auto get_thread = FFunctionGraphTask::CreateAndDispatchWhenReady(MoveTemp(thread_fun));
 	//auto ger  = FFunctionGraphTask::CreateAndDispatchWhenReady(MoveTemp(thread_fun));
-
 	// 同时创建多个任务
-
-	/*
 	FGraphEventArray Tasks;
-	Tasks.Add(ger);
-	FFunctionGraphTask::CreateAndDispatchWhenReady([]()
-	{
-		Log_CurrentThread(TEXT("任务完成"));
-	},TStatId{},&Tasks,ENamedThreads::GameThread);
-	Log_CurrentThread(TEXT("任务下派Test1"));
-	*/
+	Tasks.Add(get_thread);
+	return FFunctionGraphTask::CreateAndDispatchWhenReady(MoveTemp(game_fun),TStatId{},&Tasks,ENamedThreads::GameThread);
 }
 
 

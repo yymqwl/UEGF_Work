@@ -37,8 +37,8 @@ GF_LOG(TEXT("%s[%d] 使用线程"), *CurrentThreadName, CurrentThreadId);
 extern GF_CORE_API void Log_CurrentThread(const FString& str);
 
 
-
-
+template<typename TEnum>
+extern GF_CORE_API FString GetEnumValueAsString(const FString& Name, TEnum Value);
 
 
 

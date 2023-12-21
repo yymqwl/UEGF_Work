@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ASQLSubsystem.h"
+#include "SQLSubsystem.h"
 #include <soci/soci.h>
 #include <soci/odbc/soci-odbc.h>
 #if PLATFORM_WINDOWS
@@ -21,11 +21,22 @@ class SOCI_API UOdbcSubsystem : public UASQLSubsystem
 public:
 	UOdbcSubsystem();
 	virtual ~UOdbcSubsystem() override;
-	virtual ESocil_SQLType Get_SQLType() override;
-	virtual void Initialize(const FSociDefinition* sociDefinition) override;
+	//virtual ESocil_SQLType Get_SQLType() override;
+	//virtual void Initialize(const FSociDefinition* sociDefinition) override;
 
-	virtual  void Open() override;
+	//soci::backend_factory Get_backend_factory() override;
+	
+	//virtual void Open() override;
+	//virtual void Close() override;
 
+	 
+
+	/*
+	template <typename T>
+	TArray<T> Qeury(FString& sql);
+	*/
+
+	//virtual void Ping_SQL() override;
 protected:
-	soci::session Sql_Session;//ODBC
+	//soci::session Sql_Session;//ODBC
 };

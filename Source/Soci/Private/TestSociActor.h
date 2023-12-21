@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+//#include "ASQLSubsystem.h"
 #include "GameFramework/Actor.h"
 #include "TestSociActor.generated.h"
 
+class USQLSubsystem;
 UCLASS()
 class ATestSociActor : public AActor
 {
@@ -19,8 +21,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void Ping_SQL();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	
+	UPROPERTY()
+	TObjectPtr<USQLSubsystem> PSQLSubsys;
 };

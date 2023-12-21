@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "SociSetting.h"
-
 #include "ASQLSubsystem.generated.h"
 
 class USociSubsystem;
@@ -15,6 +14,7 @@ class USociSubsystem;
 
 
 UCLASS(Abstract)
+
 class SOCI_API UASQLSubsystem : public UObject
 {
 	GENERATED_BODY()
@@ -31,16 +31,27 @@ public:
 	virtual void Open();
 	UFUNCTION()
 	virtual  bool IsConnected();
-
 	UFUNCTION()
-	virtual ESocil_SQLType Get_SQLType();
+	virtual void Close();
+
+	
+	template<typename  T>
+	TArray<T> Query(FString sql);
 
 	//线程执行,主线程执行
-	virtual void SQL_Operate(TUniqueFunction<void()>&& thread_fun,TUniqueFunction<void()> game_fun);
+	virtual FGraphEventRef Async_Operate(TUniqueFunction<void()>&& thread_fun,TUniqueFunction<void()>&& game_fun);
 
 	
 	virtual void Tick();
+
+	void UpdateActiveTime();
+	
+	virtual void Ping_SQL();//定时Ping 防止断开连接
 	//TFuture<bool> GetTime();
+
+	//////////////需要重载的数据
+	ESocil_SQLType Get_SQLType();
+	////
 	
 	USociSubsystem* GetSociSubsystem() const;
 protected:
@@ -51,4 +62,5 @@ protected:
 	FCriticalSection SQL_CS;//线程同步锁
 	FTimerHandle TH_Tick;
 	int8  IRetry;//重试次数
+	double LastActiveTime;
 };
