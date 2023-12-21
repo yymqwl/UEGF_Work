@@ -3,10 +3,9 @@
 
 #include "SociSubsystem.h"
 
-#include "ASQLSubsystem.h"
+#include "SQLSubsystem.h"
 #include "SociLog.h"
 #include "SociSetting.h"
-#include "SQLSubsystem.h"
 
 void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -92,7 +91,7 @@ void USociSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 }
 
 
-TObjectPtr<UASQLSubsystem> USociSubsystem::Find_SQLSubsystem(FName name)
+TObjectPtr<USQLSubsystem> USociSubsystem::Find_SQLSubsystem(FName name)
 {
 	return  SQLSubsystem_Map[name];
 }
@@ -107,7 +106,7 @@ void USociSubsystem::Deinitialize()
 {
 
 	SOCI_LOG(TEXT("USociSubsystem Deinitialize"));
-	for (TTuple<FName, TObjectPtr<UASQLSubsystem>>&  sqlsubsys : SQLSubsystem_Map)
+	for (TTuple<FName, TObjectPtr<USQLSubsystem>>&  sqlsubsys : SQLSubsystem_Map)
 	{
 		sqlsubsys.Value->Deinitialize();
 	}

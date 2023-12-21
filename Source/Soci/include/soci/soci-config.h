@@ -19,7 +19,7 @@
 /* #undef SOCI_HAVE_BOOST_DATE_TIME */
 
 // Enables C++11 support
-/* #undef SOCI_HAVE_CXX11 */
+#define SOCI_HAVE_CXX11
 
 // DB2 backend
 /* #undef SOCI_HAVE_DB2 */
@@ -48,5 +48,7 @@
 // Test SOCI_HAVE_VISIBILITY_SUPPORT
 /* #undef SOCI_HAVE_VISIBILITY_SUPPORT */
 
+//此文件是自动生成加手动加部分功能
+#pragma warning(disable:4996)//去除部分警告
 
 #endif // SOCICONFIG_H_INCLUDED

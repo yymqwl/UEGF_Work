@@ -2,9 +2,9 @@
 
 
 #include "Test/TestAsyncActor.h"
-
-#include "GFCoreGlobals.h"
 #include "Soci/Private/SQLSubsystem.h"
+#include "GFCoreGlobals.h"
+#include "Person.h"
 
 // Sets default values
 ATestAsyncActor::ATestAsyncActor()
@@ -59,9 +59,13 @@ void ATestAsyncActor::Test1()
 {
 	GF_LOG(TEXT("Test1 Call:%f"),	FPlatformTime::Seconds());
 
-	//TestSociActor->PSQLSubsys->Ping_SQL();
+	
+	TestSociActor->PSQLSubsys->Query<Person>(TEXT("select * from Person"),[](TSharedPtr<Person> p)
+	{
+		GF_LOG(TEXT("Test1 Call From Query :%s"), UTF8_TO_TCHAR( p->Name.c_str()));
+	});
 
-	TestSociActor->PSQLSubsys->Ping_SQL();
+	//TestSociActor->PSQLSubsys->Ping_SQL();
 	/*
 	TArray<int> ay ;
 	ay.Sort()
@@ -82,7 +86,7 @@ void ATestAsyncActor::Test1()
 	{
 		Log_CurrentThread(TEXT("任务完成"));
 	},TStatId{},&Tasks,ENamedThreads::GameThread);*/
-	Log_CurrentThread(TEXT("任务下派Test1"));
+	//Log_CurrentThread(TEXT("任务下派Test1"));
 
 	//GetGameInstance()->GetSubsystem<>()
 }

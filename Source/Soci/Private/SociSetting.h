@@ -58,6 +58,20 @@ struct FSociDefinition
 	}
 };
 
+USTRUCT()
+struct FSoci_Row
+{
+	GENERATED_BODY()
+};
+
+/*
+template<typename T>
+struct SQL_Function
+{
+public:
+	TUniquePtr<T> pt;
+	TUniqueFunction<T> fun;
+};*/
 //tick刷新间隔
 #define SQLSubSys_Tick_Rate 5.f
 //重试次数

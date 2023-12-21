@@ -8,6 +8,7 @@
 #ifndef SOCI_H_INCLUDED
 #define SOCI_H_INCLUDED
 
+
 // namespace soci
 #include "soci/soci-platform.h"
 #include "soci/backend-loader.h"

@@ -32,11 +32,12 @@ public class Soci : ModuleRules
 		});
 		
 		
+		/*
 		PublicDefinitions.AddRange(new []
 		{
             "_CRT_SECURE_NO_DEPRECATE"//去除警告
 			//"SOCI_LOG =1 "
-		});
+		});*/
 
 		bUseRTTI = true;//开启RTTI 使用dynamic_cast功能
 		

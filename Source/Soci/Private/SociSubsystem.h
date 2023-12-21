@@ -7,7 +7,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "SociSubsystem.generated.h"
 
-class UASQLSubsystem;
+class USQLSubsystem;
 
 
 /**
@@ -27,7 +27,7 @@ public:
 	virtual void Deinitialize()override;
 
 
-	TObjectPtr<UASQLSubsystem> Find_SQLSubsystem(FName name);
+	TObjectPtr<USQLSubsystem> Find_SQLSubsystem(FName name);
 private:
 	void ClearArray();
 
@@ -41,5 +41,5 @@ protected:
 	*/
 	//TMap<ESocil_SQLType,UASQLSubsystem*> SQLSubsystem_Map;
 	UPROPERTY()
-	TMap<FName,TObjectPtr<UASQLSubsystem>> SQLSubsystem_Map;//可能会有多个连接
+	TMap<FName,TObjectPtr<USQLSubsystem>> SQLSubsystem_Map;//可能会有多个连接
 };

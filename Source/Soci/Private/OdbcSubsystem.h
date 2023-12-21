@@ -2,20 +2,20 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "SQLSubsystem.h"
 #include <soci/soci.h>
 #include <soci/odbc/soci-odbc.h>
+#include "SQLSubsystem.h"
+#include "CoreMinimal.h"
 #if PLATFORM_WINDOWS
 #endif
 #include "OdbcSubsystem.generated.h"
 
-
+//DECLARE_DELEGATE_OneParam(FStringDelegate, FString);
 /**
  * 
  */
 UCLASS()
-class SOCI_API UOdbcSubsystem : public UASQLSubsystem
+class SOCI_API UOdbcSubsystem : public USQLSubsystem
 {
 	GENERATED_BODY()
 public:
