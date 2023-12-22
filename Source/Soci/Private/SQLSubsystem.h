@@ -36,24 +36,108 @@ public:
 	UFUNCTION()
 	virtual void Close();
 
+
+	template<typename T>
+	void Query(const FString& sql,TFunction<void(TSharedPtr<TArray<T>>,TSharedPtr<FSoci_Error> error)> fun)
+	{
+		TSharedPtr<TArray<T>>  p_ay=  MakeShareable(new TArray<T>);
+		TSharedPtr<FSoci_Error> p_error = MakeShareable(new FSoci_Error);
+		//这里用引用传值大概率会报错,变量大部分都是局部
+		auto get_thread = FFunctionGraphTask::CreateAndDispatchWhenReady([this,sql,p_ay,p_error]()
+		{
+			try
+			{
+				auto str =TCHAR_TO_UTF8(*sql);
+				FScopeLock SL(&this->SQL_CS);
+				soci::rowset<T> rs=(this->Sql_Session.prepare << TCHAR_TO_UTF8(*sql) );
+				for (auto it = rs.begin(); it != rs.end(); ++it)
+				{
+					p_ay->Add((*it));
+				}
+				this->UpdateActiveTime();
+				//SOCI_LOG(TEXT("query success"));
+			}
+			catch (std::runtime_error const& e)
+			{
+				p_error->ErrorType = FSoci_ErrorType::EQuery;
+				p_error->ErrorMsg = UTF8_TO_TCHAR(e.what());
+				SOCI_ERROR(TEXT("Query Error: %s"), *p_error->ErrorMsg);
+			}
+			catch (std::exception e)
+			{
+				p_error->ErrorType = FSoci_ErrorType::EUnKnowns;
+				p_error->ErrorMsg = UTF8_TO_TCHAR(e.what());
+				SOCI_ERROR(TEXT("Query Error:%s"),*p_error->ErrorMsg);
+			}
+		});
+		
+		FGraphEventArray Tasks;
+		Tasks.Add(get_thread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady([this,fun,p_ay,p_error]()
+		{
+			fun(p_ay,p_error );
+		},TStatId{},&Tasks,ENamedThreads::GameThread);
+	}
+	template<typename T>
+	void Insert(const FString& sql,TSharedPtr<T> data,TFunction<void(TSharedPtr<FSoci_Error> error)> fun)
+	{
+		TSharedPtr<FSoci_Error> p_error = MakeShareable(new FSoci_Error);
+		
+		auto get_thread = FFunctionGraphTask::CreateAndDispatchWhenReady([this,sql,data,p_error]()
+		{
+			try
+			{
+				auto str =TCHAR_TO_UTF8(*sql);
+				FScopeLock SL(&this->SQL_CS);
+
+				Sql_Session << sql , soci::use()
+
+
+				/*
+				soci::rowset<T> rs=(this->Sql_Session.prepare << TCHAR_TO_UTF8(*sql) );
+				for (auto it = rs.begin(); it != rs.end(); ++it)
+				{
+					p_ay->Add((*it));
+				}*/
+				this->UpdateActiveTime();
+				//SOCI_LOG(TEXT("query success"));
+			}
+			catch (std::runtime_error const& e)
+			{
+				p_error->ErrorType = FSoci_ErrorType::EQuery;
+				p_error->ErrorMsg = UTF8_TO_TCHAR(e.what());
+				SOCI_ERROR(TEXT("Query Error: %s"), *p_error->ErrorMsg);
+			}
+			catch (std::exception e)
+			{
+				p_error->ErrorType = FSoci_ErrorType::EUnKnowns;
+				p_error->ErrorMsg = UTF8_TO_TCHAR(e.what());
+				SOCI_ERROR(TEXT("Query Error:%s"),*p_error->ErrorMsg);
+			}
+		});
+	}
 	
+	/*
 	template<typename  T>
 	void Query(const FString& sql,TFunction<void(TSharedPtr<T>)>  fun)
 	{
 		//TDelegate<>
 		//T t;
 		//TSharedPtr<SQL_Function<T>> pt= MakeShareable<SQL_Function<T>>(new SQL_Function<T>());
+		
 		SOCI_LOG(TEXT("query start:%s"),*sql);
 		std::string cstr (TCHAR_TO_UTF8(*sql));
+		
 
 		
-		TSharedPtr<T> pt = MakeShareable<T>(new T);
+		TSharedPtr<T> pt;
 
-		auto get_thread = FFunctionGraphTask::CreateAndDispatchWhenReady([this,sql,pt]()
+		auto get_thread = FFunctionGraphTask::CreateAndDispatchWhenReady([this,sql,&pt]()
 		{
 			try
 			{
 				FScopeLock SL(&this->SQL_CS);
+				pt = MakeShareable<T>(new T);
 				//TCHAR_TO_UTF8(*sql)
 				//std::string cstr(TCHAR_TO_UTF8(*sql));
 				this->Sql_Session << TCHAR_TO_UTF8(*sql) ,soci::into(*pt);
@@ -70,25 +154,11 @@ public:
 		// 同时创建多个任务
 		FGraphEventArray Tasks;
 		Tasks.Add(get_thread);
-		FFunctionGraphTask::CreateAndDispatchWhenReady([this,fun,pt]()
+		FFunctionGraphTask::CreateAndDispatchWhenReady([this,fun,&pt]()
 		{
 			fun(pt);
 		},TStatId{},&Tasks,ENamedThreads::GameThread);
-		//auto tmp_fun = MoveTemp(fun);
-/*		Async_Operate([this,&sql,pt]()
-		{
-			Sql_Session << sql , soci::into(*pt);
-		},fun(pt));
-*/
-		/*
-		Async_Operate([this,&sql,&pt]()
-		{
-			Sql_Session << sql , soci::into(*pt);
-		},[this, &pt]()
-		{
-			
-		});*/
-	}
+	}*/
 
 	//线程执行,主线程执行
 	virtual FGraphEventRef Async_Operate(TUniqueFunction<void()>&& thread_fun,TUniqueFunction<void()>&& game_fun);

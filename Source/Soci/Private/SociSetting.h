@@ -1,6 +1,6 @@
 ﻿
 #pragma once
-
+#include "soci/soci.h"
 #include "CoreMinimal.h"
 #include "SociSetting.generated.h"
 
@@ -20,6 +20,33 @@ enum class ESocil_SQLType :uint8
 	Max
 };
 ENUM_CLASS_FLAGS(ESocil_SQLType);
+
+UENUM()
+enum class FSoci_ErrorType:uint8
+{
+	ENone,
+	EQuery,
+	EUnKnowns,
+};
+USTRUCT()
+struct FSoci_Error
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY()
+	FSoci_ErrorType ErrorType;
+	UPROPERTY()
+	FString   ErrorMsg;
+	FSoci_Error():ErrorType(FSoci_ErrorType::ENone)
+	{
+		
+	}
+	bool HasError()
+	{
+		return ErrorType != FSoci_ErrorType::ENone;
+	}
+};
+
 
 //数据库连接状态
 UENUM()
@@ -58,12 +85,6 @@ struct FSociDefinition
 	}
 };
 
-USTRUCT()
-struct FSoci_Row
-{
-	GENERATED_BODY()
-};
-
 /*
 template<typename T>
 struct SQL_Function
@@ -88,3 +109,50 @@ public:
 	UPROPERTY(Config,transient)
 	TArray<FSociDefinition> SociDefinitions;
 };*/
+
+#define SOCI_DECLARE_ROW(UeType) \
+namespace soci\
+ {\
+	template<>\
+	struct type_conversion<UeType>\
+	{\
+		typedef values base_type;\
+		static void from_base(values const & v, indicator /* ind */, UeType & p)\
+		{\
+			for (TFieldIterator<FProperty>  it(FPerson::StaticStruct()); it;++it )\
+			{\
+				auto key=it->GetNameCPP();\
+				if (it->IsA(FStrProperty::StaticClass()) )\
+				{\
+					FString str = UTF8_TO_TCHAR(v.get<std::string>(TCHAR_TO_UTF8(*key)).c_str());\
+					it->SetValue_InContainer(&p,&str);\
+				}\
+				else if (it->IsA(FIntProperty::StaticClass()))\
+				{\
+					int32   i32 = v.get<int32>(TCHAR_TO_UTF8(*key));\
+					it->SetValue_InContainer(&p,&i32);\
+				}\
+			}\
+		}\
+		static void to_base(const FPerson & p, values & v, indicator & ind)\
+		{\
+			for (TFieldIterator<FProperty>  it(FPerson::StaticStruct()); it;++it )\
+			{\
+				auto key=it->GetNameCPP();\
+				if (it->IsA(FStrProperty::StaticClass()) )\
+				{\
+					FString str ;\
+					it->GetValue_InContainer(&p,&str);\
+					v.set(TCHAR_TO_UTF8(*key), std::string( TCHAR_TO_UTF8(*str)) );\
+				}\
+				else if (it->IsA(FIntProperty::StaticClass()))\
+				{\
+					int32   i32;\
+					it->GetValue_InContainer(&p,&i32);\
+					v.set(TCHAR_TO_UTF8(*key),i32);\
+				}\
+			}\
+			ind = i_ok;\
+		}\
+	};\
+}

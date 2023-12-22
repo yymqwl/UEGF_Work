@@ -59,12 +59,54 @@ void ATestAsyncActor::Test1()
 {
 	GF_LOG(TEXT("Test1 Call:%f"),	FPlatformTime::Seconds());
 
+
 	
-	TestSociActor->PSQLSubsys->Query<Person>(TEXT("select * from Person"),[](TSharedPtr<Person> p)
+
+	TestSociActor->PSQLSubsys->Query<FPerson>(TEXT("select * from Person"),[](TSharedPtr<TArray<FPerson>> p_ay,TSharedPtr<FSoci_Error> error)
+	{
+		if (error->HasError())
+		{
+			return;
+		}
+		
+		if (p_ay->Num()>0)
+		{
+			GF_LOG(TEXT("Test1 Call From Query :%s"),  *(*p_ay)[0].Name );
+		}
+	});
+	/*
+	TestSociActor->PSQLSubsys->Query<FPerson>(TEXT("select * from Person"),[](TSharedPtr<FPerson> p)
+	{
+		GF_LOG(TEXT("Test1 Call From Query :%s"),  *p->Name );
+	});*/
+	/*[](TSharedPtr<Person> p)
 	{
 		GF_LOG(TEXT("Test1 Call From Query :%s"), UTF8_TO_TCHAR( p->Name.c_str()));
-	});
-
+	});*/
+	/*
+	FPerson fp;
+	fp.Name = TEXT("测试名称1");
+	const UStruct* structClass= FPerson::StaticStruct();
+	structClass->ChildProperties;
+	
+	GF_LOG(TEXT("Test1 Call:%s"),*structClass->GetName());
+	//遍历属性
+	
+	for (TFieldIterator<FProperty> i(FPerson::StaticStruct()); i; ++i)
+	{
+		FProperty* prop=*i;
+		if (prop->IsA(FStrProperty::StaticClass()))//(const FStrProperty* StringProperty = Cast<FStrProperty>(prop) )
+		{
+			const FStrProperty* StringProperty = CastFieldChecked<FStrProperty>(prop);
+			auto str	= StringProperty->GetPropertyValue_InContainer(&fp);
+			GF_LOG(TEXT("%s:%s"),*prop->GetNameCPP(),*str);
+		}
+		//prop->GetValue_InContainer()
+		//(*prop).IsA<>()
+		GF_LOG(TEXT("Test1 Call %s"),*prop->GetName());
+		GF_LOG(TEXT("Test1 Call 2"));
+		
+	}*/
 	//TestSociActor->PSQLSubsys->Ping_SQL();
 	/*
 	TArray<int> ay ;
