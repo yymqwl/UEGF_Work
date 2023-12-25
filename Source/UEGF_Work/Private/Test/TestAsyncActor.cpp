@@ -4,7 +4,9 @@
 #include "Test/TestAsyncActor.h"
 #include "Soci/Private/SQLSubsystem.h"
 #include "GFCoreGlobals.h"
+#include "Soci/Private/SQLDataType.h"
 #include "Person.h"
+
 
 // Sets default values
 ATestAsyncActor::ATestAsyncActor()
@@ -59,9 +61,41 @@ void ATestAsyncActor::Test1()
 {
 	GF_LOG(TEXT("Test1 Call:%f"),	FPlatformTime::Seconds());
 
+	FSQL_Float f;
+	
+	GF_LOG(TEXT("%d"),f.bChange);
+	f = 33;
+	GF_LOG(TEXT("%d"),f.bChange);
+	//f = 44;
+	//FVector2d V2= 
+	//FSQL_Float  f();
+	//auto str = FString::Format(TEXT("{0}:{1}"), {TEXT("11"),TEXT("2222222")});
+	//auto str = TestSociActor->PSQLSubsys->GetInsertSQLStr<FPerson>();//FString(TEXT("Test1 Call:"));
+	
+	/*
+	TSharedPtr<FPerson> p2 = MakeShareable(new FPerson);
+	p2->Id= 5;
+	p2->Name  = TEXT("测试5");
 
 	
-
+	
+	TestSociActor->PSQLSubsys->Insert(p2,[](TSharedPtr<FSoci_Error> error)
+	{
+		if (error->HasError())
+		{
+			return;
+		}
+		GF_LOG(TEXT("插入成功") );
+	});*/
+	//FPerson::StaticStruct()->GetName()
+	/*
+	str.LeftInline(str.Len()-1);
+	str +=")";
+	*/
+	
+	//GF_LOG(TEXT("%s"),*str);
+	
+	/*
 	TestSociActor->PSQLSubsys->Query<FPerson>(TEXT("select * from Person"),[](TSharedPtr<TArray<FPerson>> p_ay,TSharedPtr<FSoci_Error> error)
 	{
 		if (error->HasError())
@@ -71,9 +105,9 @@ void ATestAsyncActor::Test1()
 		
 		if (p_ay->Num()>0)
 		{
-			GF_LOG(TEXT("Test1 Call From Query :%s"),  *(*p_ay)[0].Name );
+			GF_LOG(TEXT("Test1 Call From Query :%s"),  *(*p_ay)[4].Name );
 		}
-	});
+	});*/
 	/*
 	TestSociActor->PSQLSubsys->Query<FPerson>(TEXT("select * from Person"),[](TSharedPtr<FPerson> p)
 	{

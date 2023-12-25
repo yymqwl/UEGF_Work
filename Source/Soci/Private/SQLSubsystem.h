@@ -36,7 +36,28 @@ public:
 	UFUNCTION()
 	virtual void Close();
 
-
+	
+	template<typename T>
+	FString GetInsertSQLStr()
+	{
+		//check(str_tb.IsEmpty());
+	    FString	str_tb = T::StaticStruct()->GetName();
+		FString str1 = FString::Format(TEXT("insert into {0}("),{*str_tb});
+		FString str2 = FString(TEXT("values("));
+		for (TFieldIterator<FProperty>  it(T::StaticStruct()); it;++it )
+		{
+			auto key=it->GetNameCPP();
+			str1 += FString::Format(TEXT("{0},"),{*key});
+			str2 += FString::Format(TEXT(":{0},"),{*key}); //TEXT(":")+TCHAR_TO_UTF8(*key)+""
+		}
+		str1.LeftInline(str1.Len()-1);
+		str2.LeftInline(str2.Len()-1);
+		
+		FString str = FString::Format(TEXT("{0}) {1})"),{*str1,*str2});
+		//FString::Left()
+		return str;
+	}
+	
 	template<typename T>
 	void Query(const FString& sql,TFunction<void(TSharedPtr<TArray<T>>,TSharedPtr<FSoci_Error> error)> fun)
 	{
@@ -78,33 +99,26 @@ public:
 			fun(p_ay,p_error );
 		},TStatId{},&Tasks,ENamedThreads::GameThread);
 	}
+	//"insert into person(Id, Name) values(:Id, :Name)"//标准输入
 	template<typename T>
-	void Insert(const FString& sql,TSharedPtr<T> data,TFunction<void(TSharedPtr<FSoci_Error> error)> fun)
+	void Insert(TSharedPtr<T> data,TFunction<void(TSharedPtr<FSoci_Error> error)> fun)
 	{
 		TSharedPtr<FSoci_Error> p_error = MakeShareable(new FSoci_Error);
 		
-		auto get_thread = FFunctionGraphTask::CreateAndDispatchWhenReady([this,sql,data,p_error]()
+		auto get_thread = FFunctionGraphTask::CreateAndDispatchWhenReady([this,data,p_error]()
 		{
 			try
 			{
-				auto str =TCHAR_TO_UTF8(*sql);
+				auto sql = TCHAR_TO_UTF8(*GetInsertSQLStr<T>());
 				FScopeLock SL(&this->SQL_CS);
-
-				Sql_Session << sql , soci::use()
-
-
-				/*
-				soci::rowset<T> rs=(this->Sql_Session.prepare << TCHAR_TO_UTF8(*sql) );
-				for (auto it = rs.begin(); it != rs.end(); ++it)
-				{
-					p_ay->Add((*it));
-				}*/
+				Sql_Session << sql ,
+				soci::use(*data);
 				this->UpdateActiveTime();
 				//SOCI_LOG(TEXT("query success"));
 			}
 			catch (std::runtime_error const& e)
 			{
-				p_error->ErrorType = FSoci_ErrorType::EQuery;
+				p_error->ErrorType = FSoci_ErrorType::EInsert;
 				p_error->ErrorMsg = UTF8_TO_TCHAR(e.what());
 				SOCI_ERROR(TEXT("Query Error: %s"), *p_error->ErrorMsg);
 			}
@@ -160,10 +174,13 @@ public:
 		},TStatId{},&Tasks,ENamedThreads::GameThread);
 	}*/
 
+	void Test_1();
+	
+	
 	//线程执行,主线程执行
 	virtual FGraphEventRef Async_Operate(TUniqueFunction<void()>&& thread_fun,TUniqueFunction<void()>&& game_fun);
 	
-
+	
 	
 	virtual void Tick();
 
@@ -190,5 +207,7 @@ protected:
 	FTimerHandle TH_Tick;
 	int8  IRetry;//重试次数
 	double LastActiveTime;
+	
+public:
 	soci::session Sql_Session;//回话
 };

@@ -26,8 +26,11 @@ enum class FSoci_ErrorType:uint8
 {
 	ENone,
 	EQuery,
+	EInsert,
 	EUnKnowns,
 };
+
+
 USTRUCT()
 struct FSoci_Error
 {
@@ -86,6 +89,14 @@ struct FSociDefinition
 };
 
 /*
+USTRUCT()
+struct FSQL_Float : public FSQLDataType
+{
+	GENERATED_BODY()
+public:
+	
+};*/
+/*
 template<typename T>
 struct SQL_Function
 {
@@ -110,6 +121,7 @@ public:
 	TArray<FSociDefinition> SociDefinitions;
 };*/
 
+
 #define SOCI_DECLARE_ROW(UeType) \
 namespace soci\
  {\
@@ -119,7 +131,7 @@ namespace soci\
 		typedef values base_type;\
 		static void from_base(values const & v, indicator /* ind */, UeType & p)\
 		{\
-			for (TFieldIterator<FProperty>  it(FPerson::StaticStruct()); it;++it )\
+			for (TFieldIterator<FProperty>  it(UeType::StaticStruct()); it;++it )\
 			{\
 				auto key=it->GetNameCPP();\
 				if (it->IsA(FStrProperty::StaticClass()) )\
@@ -136,7 +148,7 @@ namespace soci\
 		}\
 		static void to_base(const FPerson & p, values & v, indicator & ind)\
 		{\
-			for (TFieldIterator<FProperty>  it(FPerson::StaticStruct()); it;++it )\
+			for (TFieldIterator<FProperty>  it(UeType::StaticStruct()); it;++it )\
 			{\
 				auto key=it->GetNameCPP();\
 				if (it->IsA(FStrProperty::StaticClass()) )\

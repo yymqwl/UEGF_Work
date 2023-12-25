@@ -245,6 +245,12 @@ void USQLSubsystem::Query(FString sql, TUniqueFunction<void(T)> fun)
 	fun.Callable(nullptr);
 }*/
 
+void USQLSubsystem::Test_1( )
+{
+//	Sql_Session << sql ,
+//			soci::use(*data);
+}
+
 
 
 

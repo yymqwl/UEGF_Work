@@ -20,6 +20,7 @@ public:
 };
 
 SOCI_DECLARE_ROW(FPerson)
+
 /*
 namespace soci
 {
