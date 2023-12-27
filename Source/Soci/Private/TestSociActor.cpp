@@ -23,6 +23,7 @@ void ATestSociActor::BeginPlay()
 		PSQLSubsys = Cast<USQLSubsystem>( ssy->Find_SQLSubsystem(TEXT("数据库1")));
 	}
 	
+	//FindFProperty<>()
 }
 void ATestSociActor::Ping_SQL()
 {

@@ -13,6 +13,7 @@ UOdbcSubsystem::UOdbcSubsystem()
 UOdbcSubsystem::~UOdbcSubsystem()
 {
 	SOCI_LOG(TEXT("~UOdbcSubsystem()"));
+	
 }
 
 /*

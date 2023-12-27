@@ -4,9 +4,8 @@
 #include "Test/TestAsyncActor.h"
 #include "Soci/Private/SQLSubsystem.h"
 #include "GFCoreGlobals.h"
-#include "Soci/Private/SQLDataType.h"
+#include "Soci/Private/SQLTableWrapper.h"
 #include "Person.h"
-
 
 // Sets default values
 ATestAsyncActor::ATestAsyncActor()
@@ -61,25 +60,65 @@ void ATestAsyncActor::Test1()
 {
 	GF_LOG(TEXT("Test1 Call:%f"),	FPlatformTime::Seconds());
 
-	FSQL_Float f;
-	
-	GF_LOG(TEXT("%d"),f.bChange);
-	f = 33;
-	GF_LOG(TEXT("%d"),f.bChange);
+
+
+
+	/*
+	TSharedPtr< SQLTableWrapper<FPerson> > f = MakeShareable(new SQLTableWrapper<FPerson>);
+	f->Rows.Add( MakeShareable(new SQLRowWrapper<FPerson>()) );
+	int x= 33;
+	int y ;
+	f->Rows[0]->SetValue("Id",&x);
+	f->Rows[0]->GetValue("Id",&y);
+	GF_LOG(TEXT("插入成功%d"),y );*/
+	//FPerson::StaticStruct()
 	//f = 44;
 	//FVector2d V2= 
 	//FSQL_Float  f();
 	//auto str = FString::Format(TEXT("{0}:{1}"), {TEXT("11"),TEXT("2222222")});
 	//auto str = TestSociActor->PSQLSubsys->GetInsertSQLStr<FPerson>();//FString(TEXT("Test1 Call:"));
 	
-	/*
-	TSharedPtr<FPerson> p2 = MakeShareable(new FPerson);
-	p2->Id= 5;
-	p2->Name  = TEXT("测试5");
+	//TSubclassOf<FSQLRow> p2 ;
+	//p2  = FPerson::StaticStruct();
+	//FPerson::StaticStruct()
+	//p2->IsChildOf();
+	//TSubclassOf<>
+	
+	//TSharedPtr<SQLRowWrapper<FPerson>> p2 = MakeShareable(new SQLRowWrapper<FPerson>());
+	
+	//TestSociActor->PSQLSubsys->Query()
+	
+	TSharedRef<SQLTableWrapper<FPerson>> ptr_tb =MakeShareable(new SQLTableWrapper<FPerson>());
+	TSharedRef<SQLRowWrapper<FPerson>>   ptr_row=MakeShareable(new SQLRowWrapper<FPerson>);
+	ptr_row->Data.Id = 6;
+	ptr_row->Data.Name = FString(TEXT("测试7"));
+	//ptr_row->SetValue(FName("Name"), FString(TEXT("测试6")),true);
 
+	//ptr_row->Data.Name = TEXT("测试6");
+	ptr_tb.Get().Rows.Add(ptr_row);
+	
+
+	/*
+	TestSociActor->PSQLSubsys->Update<FPerson>(ptr_tb,[]( TSharedRef<SQLTableWrapper<FPerson>> pt_result , TSharedRef<FSoci_Error> error)
+	{
+		if (error->HasError())
+		{
+			return;
+		}
+		GF_LOG(TEXT("更新成功") );
+	});*/
 	
 	
-	TestSociActor->PSQLSubsys->Insert(p2,[](TSharedPtr<FSoci_Error> error)
+	TestSociActor->PSQLSubsys->Insert<FPerson>(ptr_tb,[]( TSharedRef<SQLTableWrapper<FPerson>> pt_result , TSharedRef<FSoci_Error> error)
+		{
+			if (error->HasError())
+			{
+				return;
+			}
+			GF_LOG(TEXT("插入成功") );
+		});
+	/*
+	TestSociActor->PSQLSubsys->Insert<FPerson>(ptr_tb,[]( TSharedRef<SQLTableWrapper<FPerson>> pt_result , TSharedRef<FSoci_Error> error)
 	{
 		if (error->HasError())
 		{
@@ -96,16 +135,16 @@ void ATestAsyncActor::Test1()
 	//GF_LOG(TEXT("%s"),*str);
 	
 	/*
-	TestSociActor->PSQLSubsys->Query<FPerson>(TEXT("select * from Person"),[](TSharedPtr<TArray<FPerson>> p_ay,TSharedPtr<FSoci_Error> error)
+	TestSociActor->PSQLSubsys->Query<FPerson>(TEXT("select * from Person"),[](TSharedPtr<SQLTableWrapper<FPerson>> SqlTable,TSharedPtr<FSoci_Error> error)
 	{
 		if (error->HasError())
 		{
 			return;
 		}
-		
-		if (p_ay->Num()>0)
+
+		for (auto row : SqlTable->Rows)
 		{
-			GF_LOG(TEXT("Test1 Call From Query :%s"),  *(*p_ay)[4].Name );
+			GF_LOG(TEXT("Test1 Call From Query :%s"),  *row->Data.Name);
 		}
 	});*/
 	/*

@@ -4,12 +4,12 @@
 //#include "soci/soci-backend.h"
 #include "Soci/Private/SociSetting.h"
 #include "CoreMinimal.h"
-#include "GFCoreGlobals.h"
+#include "Soci/Private/SQLTableWrapper.h"
 #include "Person.generated.h"
 
 
 USTRUCT()
-struct FPerson
+struct FPerson : public FSQLRow
 {
 	GENERATED_BODY();
 public:
@@ -17,11 +17,28 @@ public:
 	int Id;
 	UPROPERTY()
 	FString Name;
-};
 
-SOCI_DECLARE_ROW(FPerson)
+};
+/*
+struct Person
+{
+	int Id;
+	std::string Name;
+public:
+	Person()
+	{
+		GF_LOG(TEXT("Person"));
+	}
+	~Person()
+	{
+		GF_LOG(TEXT("~Person"));
+	}
+};*/
 
 /*
+SOCI_DECLARE_ROW(FPerson)
+
+
 namespace soci
 {
 	template<>
@@ -70,7 +87,7 @@ namespace soci
 			ind = i_ok;
 		}
 	};
-}*/
+}
 
 
 struct Person
@@ -94,7 +111,7 @@ namespace soci
 	{
 		typedef values base_type;
 
-		static void from_base(values const & v, indicator /* ind */, Person & p)
+		static void from_base(values const & v, indicator  ind , Person & p)
 		{
 			p.Id = v.get<int>("Id");
 			p.Name = v.get<std::string>("Name");
@@ -107,4 +124,4 @@ namespace soci
 			ind = i_ok;
 		}
 	};
-}
+}*/

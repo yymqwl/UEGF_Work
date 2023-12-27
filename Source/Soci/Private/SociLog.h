@@ -12,6 +12,9 @@ SOCI_API DECLARE_LOG_CATEGORY_EXTERN(Soci_Log,Log,All);
 UE_LOG(Soci_Log,Log,Format,##__VA_ARGS__)
 
 
+
+
+
 #define SOCI_ERROR(Format, ...) \
 UE_LOG(Soci_Log,Error,Format,##__VA_ARGS__)
 

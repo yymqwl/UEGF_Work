@@ -27,6 +27,8 @@ enum class FSoci_ErrorType:uint8
 	ENone,
 	EQuery,
 	EInsert,
+	EDelete,
+	EUpdate,
 	EUnKnowns,
 };
 
